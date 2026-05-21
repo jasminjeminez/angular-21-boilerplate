@@ -25,6 +25,12 @@ export class VerifyEmailComponent implements OnInit {
         const token = this.route.snapshot.queryParams['token'];
         this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
 
+        // ✅ FIX: logout any existing session before verifying
+        if (this.accountService.accountValue) {
+            this.accountService.logout();
+            return;
+        }
+
         this.accountService.verifyEmail(token)
             .pipe(first())
             .subscribe({
