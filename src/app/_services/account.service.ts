@@ -25,6 +25,7 @@ export class AccountService {
     public get accountValue() {
         return this.accountSubject.value;
     }
+
     login(email: string, password: string) {
         return this.http.post<any>(`${baseUrl}/authenticate`, { email, password }, { withCredentials: true })
             .pipe(map(account => {
@@ -57,15 +58,16 @@ export class AccountService {
     verifyEmail(token: string) {
         return this.http.post(`${baseUrl}/verify-email`, { token });
     }
+
     forgotPassword(email: string) {
         return this.http.post(`${baseUrl}/forgot-password`, { email });
     }
 
-    validateResetToken(token: string) {
+    validateResetToken(token: string ){
         return this.http.post(`${baseUrl}/validate-reset-token`, { token });
     }
 
-    resetPassword(token: string, password: string, confirmPassword: string) {
+    resetPassword(token: string, password: string, confirmPassword: string ) {
         return this.http.post(`${baseUrl}/reset-password`, { token, password, confirmPassword });
     }
 
@@ -77,9 +79,10 @@ export class AccountService {
         return this.http.get<Account>(`${baseUrl}/${id}`);
     }
 
-    create(params: any) {
+    create(params:any) {
         return this.http.post(baseUrl, params);
     }
+
     update(id: string, params: any) {
         return this.http.put(`${baseUrl}/${id}`, params)
             .pipe(map((account: any) => {
@@ -98,15 +101,16 @@ export class AccountService {
             .pipe(finalize(() => {
                 // auto logout if the logged in account was deleted
                 if (id === this.accountValue?.id)
-                    this.logout();
+                        this.logout();
             }));
     }
+
     // helper methods
 
     private refreshTokenTimeout?: any;
 
     private startRefreshTokenTimer() {
-        // parse json object from base64 encoded jwt token
+        // parese json object from base64 encoded jwt token
         const jwtBase64 = this.accountValue!.jwtToken!.split('.')[1];
         const jwtToken = JSON.parse(atob(jwtBase64));
 
